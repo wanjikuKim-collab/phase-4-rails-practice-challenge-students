@@ -4,25 +4,23 @@ class StudentsController < ApplicationController
     end
 
     def show
-        student = Student.find(params[:id])
+        student = Student.find_student
         render json: student, status: :ok
     end
 
     def create
-        instructor = Instructor.find(params[:id])
-        student = instructor.students.create!(student_params)
+        student = Student.create!(student_params)
         render json: student, status: :created
     end
 
     def update
-        instructor = Instructor.find(params[:id])
-        student = instructor.students.find(params[:id])
+        student = Student.find_student
         student.update!(student_params)
         render json: student, status: :accepted
     end
 
     def destroy
-        student = Student.find(params[:id])
+        student = Student.find_student
         student.destroy
         head :no_content
     end
@@ -30,6 +28,10 @@ class StudentsController < ApplicationController
     private
 
     def student_params
-        params.permit(:name, :major, :age)
+        params.permit(:name, :major, :age, :instructor_id)
+    end
+
+    def find_student
+        student = Student.find(params[:id])
     end
 end
